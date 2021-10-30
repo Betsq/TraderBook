@@ -4,23 +4,16 @@ const Schema = mongoose.Schema;
 
 function entitySchema(){
     return new Schema({
-        date: Date,
-        pair: String,
-        position: String,
+        name: String,
+        purchasePrice: Number,
         entryPrice: Number,
+        entryDate: Date,
         volume: Number,
-        shoulder: Number,
-        stop: Number,
-        takeProfit: Number,
-        exitPrice: Number,
-        time: Date,
-        comment: String,
-        profitOrLoss: Number,
-        percent: Number
+        Market: String
     });
 }
 
-const nameDocument = "Trade";
+const nameDocument = "SpotTrade";
 
 module.exports = {entitySchema, nameDocument}
 
