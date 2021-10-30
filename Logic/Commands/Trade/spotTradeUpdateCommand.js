@@ -1,4 +1,4 @@
-const tradeRepository = require("../../../DataAccess/Repository/Trade/tradeRepository");
+const spotTradeRepository = require("../../../DataAccess/Repository/Trade/spotTradeRepository");
 
 async function execute(id, request) 
 {
@@ -6,7 +6,7 @@ async function execute(id, request)
         return "Failed. Object is empty";
     }
     
-    return await tradeRepository.update(id, request);
+    return await spotTradeRepository.update(id, request);
 }
 
 module.exports = {execute};

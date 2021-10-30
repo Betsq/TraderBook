@@ -1,8 +1,10 @@
 const express = require("express");
-const tradeRoutes = require("./Routers/tradeRoutes");
-const app = express();
+const spotTradeRoutes = require("./Routers/spotTradeRoutes");
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const cors = require("cors");
+
+const app = express();
 
 const swaggerOptions = {
     swaggerDefinition: {
@@ -20,7 +22,7 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
-app.use("/trade", tradeRoutes);
+app.use("/spotTrade", cors(), spotTradeRoutes);
 
 app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 

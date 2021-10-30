@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const tradeEntity = require("../Core/Data/Entities/tradeEntity")
+const spotTradeEntity = require("../Core/Data/Entities/spotTradeEntity")
 
 const urlToDb = "mongodb://localhost:27017/TraderBookDb";
 
@@ -13,6 +13,6 @@ function disconnect(){
     mongoose.disconnect();
 }
 
-const Trade = mongoose.model(tradeEntity.nameDocument, tradeEntity.tradeEntitySchema());
+const SpotTrade = mongoose.model(spotTradeEntity.nameDocument, spotTradeEntity.entitySchema());
 
-module.exports = {disconnect, Trade};
+module.exports = {disconnect, SpotTrade};

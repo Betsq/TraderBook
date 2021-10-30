@@ -1,4 +1,4 @@
-const tradeRepository = require("../../../DataAccess/Repository/Trade/tradeRepository");
+const tradeRepository = require("../../../DataAccess/Repository/Trade/spotTradeRepository");
 
 async function execute(request) 
 {

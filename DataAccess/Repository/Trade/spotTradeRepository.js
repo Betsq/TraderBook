@@ -19,9 +19,6 @@ async function getById(id){
 }
 
 async function update(id, request){
-    console.log(id);
-    console.log(request);
-    
     await Trade.findByIdAndUpdate(id, request);
 }
 

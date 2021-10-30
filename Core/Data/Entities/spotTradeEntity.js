@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-function tradeEntitySchema(){
+function entitySchema(){
     return new Schema({
         date: Date,
         pair: String,
@@ -22,5 +22,5 @@ function tradeEntitySchema(){
 
 const nameDocument = "Trade";
 
-module.exports = {tradeEntitySchema, nameDocument}
+module.exports = {entitySchema, nameDocument}
 
