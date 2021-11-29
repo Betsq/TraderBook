@@ -1,6 +1,8 @@
 #modules
 node_modules
 
+CoinMarketApiKey.js
+
 # Logs
 logs
 *.log
