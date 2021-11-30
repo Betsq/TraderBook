@@ -35,7 +35,6 @@ async function getByName(cryptoName){
 }
 
 async function getByIds(ids){
-    console.log(ids);
     return await Cryptocurrency.find({_id: {$in : ids}})
 }
 
