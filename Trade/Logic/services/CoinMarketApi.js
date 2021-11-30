@@ -1,6 +1,5 @@
 const rp = require('request-promise');
 const api_key = require('../../CoinMarketApiKey');
-const cryptocurrencyDataDto = require('../../Core/Data/Dto/cryptocurrencyDataDto');
 
 const requestOptions = {
   method: 'GET',

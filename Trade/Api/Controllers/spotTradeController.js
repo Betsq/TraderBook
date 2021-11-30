@@ -2,15 +2,16 @@ const spotTradeCreateCommand = require("../../Logic/Commands/Trade/spotTradeCrea
 const spotTradeGetAllCommand = require("../../Logic/Commands/Trade/spotTradeGetAllCommand");
 const spotTradeGetByIdCommand = require("../../Logic/Commands/Trade/spotTradeGetByIdCommand");
 const spotTradeRemoveCommand = require("../../Logic/Commands/Trade/spotTradeRemoveCommand");
-const spotTradeUpdateCommand = require("../../Logic/Commands/Trade/spotTradeUpdateCommand")
+const spotTradeUpdateCommand = require("../../Logic/Commands/Trade/spotTradeUpdateCommand");
+const spotTradeCreateRequest = require("../../Core/Data/Requests/spotTradeCreateRequest");
 
 async function create(req, res){
     if(!req.body){
         return res.sendStatus(400);
     }
 
-    const response = await spotTradeCreateCommand.execute(req.body);
-
+    const response = await spotTradeCreateCommand.execute(new spotTradeCreateRequest.SpotTradeCreateRequest(req.body));
+    
     res.send(response);
 }
 

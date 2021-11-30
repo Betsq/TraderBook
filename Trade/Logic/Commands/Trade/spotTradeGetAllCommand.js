@@ -1,51 +1,79 @@
+const dataService = require("../../services/dataService");
+const CoinMarketService = require("../../services/CoinMarketApi");
+const cryptocurrencyService = require("../../services/cryptocurrencyService");
+const response = require("../../../Core/Data/Response/spotTradeGetAllResponse");
 const spotTradeRepository = require("../../../DataAccess/Repository/Trade/spotTradeRepository");
-const response = require("../../../Core/Data/Response/spotTradeGetAllResponse")
-const CoinMarketService = require("../../services/CoinMarketApi")
 
 async function execute(){
-    const spotTradesDocuments = await spotTradeRepository.getAll()
+    const spotTradeDocuments = await spotTradeRepository.getAll();
+    const cryptocurrencies = await getCryptocurrencies(spotTradeDocuments);
+    const cryptocurrencyData = await getDataCryptocurrency(cryptocurrencies);
     
-    const symbols = getSymbols(spotTradesDocuments);
+    return formationResponse(spotTradeDocuments, cryptocurrencyData, cryptocurrencies);
+}
 
-    const dataCoins = await CoinMarketService.dataCoin(symbols);
-
+function formationResponse(spotTradeDocuments, cryptocurrencyData, cryptocurrencies){
     let res = [];
 
-    for(let trade of spotTradesDocuments){
-        const quotes = getDataCoin(dataCoins, trade.symbol, trade.entryPrice);
-
-        res.push(new response.SpotTradeGetAllResponse(trade, quotes));
+    for(let trade of spotTradeDocuments){
+        const cryptocurrency = findCryptocurrency(cryptocurrencies, trade.cryptocurrencyId);
+        
+        const data = cryptocurrencyService.formationData(cryptocurrencyData, cryptocurrency.symbol, trade.entryPrice);
+        
+        res.push(new response.SpotTradeGetAllResponse(trade, cryptocurrency, data));
     }
     
     return res;
 }
-function getSymbols(spotTradesDocuments){
+
+function findCryptocurrency(cryptocurrencies, id){
+    for(let i = 0; i < cryptocurrencies.length; i++){
+        if(cryptocurrencies[i].id === id) return cryptocurrencies[i];
+    }
+}
+
+async function getCryptocurrencies(spotTradeDocuments){
+    const cryptocurrencyIds = getIdsCryptocurrency(spotTradeDocuments);
+
+    return await dataService.getCryptocurrencyByIds(cryptocurrencyIds);
+}
+
+async function getDataCryptocurrency(spotTradeDocuments, cryptocurrencies) {
+    const symbols = getSymbols(spotTradeDocuments, cryptocurrencies);
+
+    return await CoinMarketService.dataCoin(symbols);
+}
+
+function getSymbols(cryptocurrencies){
     let symbols = "";
 
-    for(let i = 0; i < spotTradesDocuments.length; i++){
-        if(spotTradesDocuments.length == i + 1){
-            symbols += spotTradesDocuments[i].symbol
+    for(let i = 0; i < cryptocurrencies.length; i++){
+        if(cryptocurrencies.length == i + 1){
+            symbols += cryptocurrencies[i].symbol
         } else{
-            symbols += spotTradesDocuments[i].symbol + ",";
+            symbols += cryptocurrencies[i].symbol + ",";
         }
     }
 
     return symbols;
 }
 
-function getDataCoin(dataCoins, symbol, entryPrice){
-    if(dataCoins == undefined){
-        return
+function getIdsCryptocurrency(spotTradeDocuments){
+    let cryptocurrencyIds = [];
+
+    for(let trade of spotTradeDocuments){
+        if(isExistsInArray(cryptocurrencyIds, trade.cryptocurrencyId)){
+            continue;
+        }
+
+        cryptocurrencyIds.push(trade.cryptocurrencyId);
     }
 
-    return {price: dataCoins[symbol].quote.USD.price,
-            percent_change_24h: dataCoins[symbol].quote.USD.percent_change_24h,
-            percent_change_7d: dataCoins[symbol].quote.USD.percent_change_7d,
-            percent_change_all_time: calculatePercentChangeAllTime(entryPrice, dataCoins[symbol].quote.USD.price)};
+    return cryptocurrencyIds;
 }
 
-function calculatePercentChangeAllTime(entryPrice, priceNow){
-    return (priceNow - entryPrice) / priceNow * 100;
+function isExistsInArray(arr, elem){
+    return arr.indexOf(elem) != -1;
 }
 
 module.exports = {execute};

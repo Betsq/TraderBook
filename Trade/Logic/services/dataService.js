@@ -6,6 +6,7 @@ const urlToCryptocurrency = "http://localhost:3001";
 async function getCryptocurrencyByIds(cryptoIds){
   const requestOptions = {
     method: 'POST',
+    json: true,
     uri: `${urlToCryptocurrency}/cryptocurrency/GetByIds`,
     body: {
       ids: cryptoIds

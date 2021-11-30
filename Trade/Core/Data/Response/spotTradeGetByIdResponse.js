@@ -1,10 +1,12 @@
-const spotTradeDto = require('../Dto/spotTradeDto');
-const cryptocurrencyDto = require('../Dto/cryptocurrencyDto');
+const cryptocurrencyDto = require("../Dto/cryptocurrencyDto");
+const cryptocurrencyDataDto = require("../Dto/cryptocurrencyDataDto");
+const spotTradeDto = require("../Dto/spotTradeDto");
 
 class SpotTradeGetByIdResponse {
-    constructor(spotTrade, cryptocurrency){
-            this.tradeInfo = new spotTradeDto.SpotTradeDto(spotTrade),
-            this.cryptocurrency = new cryptocurrencyDto.CryptocurrencyDto(cryptocurrency);
+    constructor(spotTrade, cryptocurrency, cryptocurrencyData){
+        this.tradeInfo = new spotTradeDto.SpotTradeDto(spotTrade);
+        this.cryptocurrency = new cryptocurrencyDto.CryptocurrencyDto(cryptocurrency);
+        this.cryptocurrencyData = new cryptocurrencyDataDto.CryptocurrencyDataDto(cryptocurrencyData);
     }
 }
 
